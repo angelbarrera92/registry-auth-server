@@ -13,6 +13,12 @@ help: Makefile
 	@echo
 
 .PHONY: build
-## build: Builds the registry-auth-server container image. tests and gosec before building
+## build: Builds the registry-auth-server container image.
 build:
-	@docker build -t registry-auth-server:latest -f build/Dockerfile .
+	@docker build --pull --no-cache -t registry-auth-server:latest --build-arg COMMIT=${GITHUB_SHA} --build-arg VERSION=$(TAG_VERSION) -f build/Dockerfile .
+
+.PHONY: push
+## push: Push the registry-auth-server container image. Ensure you are logged in the registry before pushing.
+push:
+	@docker tag registry-auth-server:latest angelbarrera92/registry-auth-server:$(TAG_VERSION)
+	@docker push angelbarrera92/registry-auth-server:$(TAG_VERSION)
