@@ -5,7 +5,7 @@ server:
 token:
   issuer: "distribution-token-server"
   expiration: 36000
-secureModule: false
+secureModule: false # true if valid tls
 tls:
-  cert: "/Users/angelbarrerasanchez-sighup/work/sighup/docker-auth/registry-auth-server/cli/server.crt"
-  key: "/Users/angelbarrerasanchez-sighup/work/sighup/docker-auth/registry-auth-server/cli/server.key"
+  cert: "/certs/tls.crt"
+  key: "/certs/tls.key"
