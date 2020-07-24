@@ -33,7 +33,7 @@ func NewTokenController(config *api.TokenConfig) *tokenController {
 			logrus.WithField("State", "NewTokenController").Errorf("LoadTokenConfig Failed:%s", err)
 			return nil
 		}
-		logrus.Infof("Load token Controller Successfully\n")
+		logrus.Infof("Load token Controller Successfully")
 	}
 	return t
 }

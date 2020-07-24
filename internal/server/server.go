@@ -73,7 +73,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 
 // run registry server
 func (rs *registryAuthServer) Run(ctx context.Context) error {
-	logrus.Info("Docker registry token server begin running.....\n")
+	logrus.Info("Docker registry token server begin running.....")
 	route := mux.NewRouter()
 	route.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		fmt.Fprintf(writer, "Hello world")
@@ -86,10 +86,10 @@ func (rs *registryAuthServer) Run(ctx context.Context) error {
 	var err error
 
 	if rs.secureModule {
-		logrus.Infof("Docker Registry Auth server Run as TLS Module\n")
+		logrus.Infof("Docker Registry Auth server Run as TLS Module")
 		err = http.ListenAndServeTLS(rs.address, rs.pem, rs.key, route)
 	} else {
-		logrus.Infof("Docker registry auth server run as insecure module\n")
+		logrus.Infof("Docker registry auth server run as insecure module")
 		err = http.ListenAndServe(rs.address, route)
 	}
 	select {
@@ -105,46 +105,37 @@ func (rs *registryAuthServer) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 	// parse request
 	authReq, err := parseRequest(r)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Parse Request authRequest Failed:%s\n", err.Error()), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("Parse Request authRequest Failed:%s", err.Error()), http.StatusBadRequest)
 		return
-	} else {
-		logrus.Debugf("[1].parse request Successfully\n")
 	}
+	logrus.Debugf("[1].parse request Successfully")
 
 	// auth username and password
 	if ok, err := rs.Authenticator.Authenticate(authReq.Username, authReq.Password); !ok {
-		logrus.Errorf("[!]Authenticated Failed:%s\n", err.Error())
-		http.Error(w, fmt.Sprintf("[!]Authenticated Failed:%s\n", err.Error()), http.StatusUnauthorized)
+		logrus.Errorf("[!]Authenticated Failed:%s", err.Error())
+		http.Error(w, fmt.Sprintf("[!]Authenticated Failed:%s", err.Error()), http.StatusUnauthorized)
 		return
-	} else {
-		logrus.Infof("[2]Auth username and password Successfully\n")
 	}
+	logrus.Infof("[2]Auth username and password Successfully")
+
 	// Acl
 	_, err = rs.Authorization.Authorize(authRequestHandler(authReq))
 	if err != nil {
-		http.Error(w, fmt.Sprintf("Authorization User Acl Faile: %s\n", err.Error()), http.StatusForbidden)
+		http.Error(w, fmt.Sprintf("Authorization User Acl Faile: %s", err.Error()), http.StatusForbidden)
 		return
-	} else {
-		logrus.Infof("[3]AUthorization action successfully\n")
 	}
+	logrus.Infof("[3]AUthorization action successfully")
 
 	// token
 	tokenstring, err := rs.Token.GenerateToken(generateTokenClaimHandler(authReq))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Generate token for %s Failed: %s", authReq.Username, err), http.StatusInternalServerError)
 		return
-	} else {
-		logrus.Infof("[4]Token Generation Successfully: \n")
 	}
+	logrus.Infof("[4]Token Generation Successfully: ")
 	data, _ := json.Marshal(&map[string]string{"access_token": tokenstring, "token": tokenstring})
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
-	return
-}
-
-func HelloIndex(w http.ResponseWriter, r *http.Request) {
-	logrus.Println(r.Method)
-	fmt.Fprintf(w, "helloworld")
 	return
 }

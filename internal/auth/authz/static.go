@@ -9,7 +9,7 @@ type staticAclAuthorization struct {
 }
 
 func NewStaticAclAuthorization() *staticAclAuthorization {
-	logrus.Info("Load Authorization Controller Successfully\n")
+	logrus.Info("Load Authorization Controller Successfully")
 	return &staticAclAuthorization{}
 }
 

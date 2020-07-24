@@ -10,7 +10,7 @@ type staticBasicAuthenticator struct {
 }
 
 func NewStaticBasicAuthenticator() *staticBasicAuthenticator {
-	logrus.Info("Load Authenticator Controller Successfully\n")
+	logrus.Info("Load Authenticator Controller Successfully")
 	return &staticBasicAuthenticator{}
 }
 
@@ -20,5 +20,5 @@ func (authn *staticBasicAuthenticator) Authenticate(username, password string) (
 			return true, nil
 		}
 	}
-	return false, fmt.Errorf("Username or password is invalid\n")
+	return false, fmt.Errorf("Username or password is invalid")
 }

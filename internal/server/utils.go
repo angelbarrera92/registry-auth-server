@@ -12,7 +12,7 @@ import (
 func parseRequest(request *http.Request) (*authRequestInfo, error) {
 	username, password, ok := request.BasicAuth()
 	if !ok {
-		return nil, fmt.Errorf("Username or password must be supplied\n")
+		return nil, fmt.Errorf("Username or password must be supplied")
 	}
 	account := request.FormValue("account")
 	if account != username {

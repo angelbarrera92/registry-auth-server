@@ -34,7 +34,7 @@ func NewTokenServerCommand() *cobra.Command {
 			ctx, cancel := context.WithCancel(context.Background())
 			defer cancel()
 			if err := s.Run(ctx); err != nil {
-				logrus.Panicf("RunServerFailed: %s\n", err.Error())
+				logrus.Panicf("RunServerFailed: %s", err.Error())
 			}
 			<-ctx.Done()
 		},

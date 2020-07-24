@@ -33,7 +33,7 @@ func NewConfigs(cfg string) *Configs {
 			cfg = "config"
 		}
 		if err := defaultConfig.initConfig(cfg); err != nil {
-			logrus.Panicf("init Config Failed: %s\n", err.Error())
+			logrus.Panicf("init Config Failed: %s", err.Error())
 		}
 	}
 	return defaultConfig
