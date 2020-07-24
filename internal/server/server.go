@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
+
+	"github.com/angelbarrera92/registry-auth-server/internal/auth/authn"
+	"github.com/angelbarrera92/registry-auth-server/internal/auth/authz"
+	"github.com/angelbarrera92/registry-auth-server/internal/configs"
+	"github.com/angelbarrera92/registry-auth-server/internal/token"
+	"github.com/angelbarrera92/registry-auth-server/pkg/api"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
-	"l0calh0st.cn/registry-auth-server/api"
-	"l0calh0st.cn/registry-auth-server/configs"
-	"l0calh0st.cn/registry-auth-server/pkg/authn/static_authn"
-	"l0calh0st.cn/registry-auth-server/pkg/autho/static_autho"
-	"l0calh0st.cn/registry-auth-server/pkg/token"
-	"net/http"
 )
 
 type registryAuthServer struct {
@@ -32,12 +33,12 @@ func NewRegistryAuthServer(cfg *configs.Configs) *registryAuthServer {
 		KeyFile:  cfg.Tls.Key,
 		Issuer:   cfg.Token.Issuer,
 	}
-	authnController := static_authn.NewStaticBasicAuthenticator()
+	authnController := authn.NewStaticBasicAuthenticator()
 	if authnController == nil {
 		logrus.WithField("State", "Build Authenticator Failed").Errorf("Authenticator is nil")
 		return nil
 	}
-	authoController := static_autho.NewStaticAclAuthorization()
+	authoController := authz.NewStaticAclAuthorization()
 	if authoController == nil {
 		logrus.WithField("State", "Build NewStaticAclAuthorization Failed").Errorf("NewStaticAclAuthorization is nil")
 		return nil

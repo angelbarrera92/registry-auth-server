@@ -1,7 +1,8 @@
-package static_authn
+package authn
 
 import (
 	"fmt"
+
 	"github.com/sirupsen/logrus"
 )
 

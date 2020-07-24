@@ -4,13 +4,14 @@ import (
 	"crypto"
 	"encoding/json"
 	"fmt"
-	"github.com/docker/distribution/registry/auth/token"
-	"github.com/docker/libtrust"
-	"github.com/sirupsen/logrus"
-	"l0calh0st.cn/registry-auth-server/api"
 	"math/rand"
 	"strings"
 	"time"
+
+	"github.com/angelbarrera92/registry-auth-server/pkg/api"
+	"github.com/docker/distribution/registry/auth/token"
+	"github.com/docker/libtrust"
+	"github.com/sirupsen/logrus"
 )
 
 var t *tokenController
@@ -31,9 +32,8 @@ func NewTokenController(config *api.TokenConfig) *tokenController {
 		if err := t.loadTokenConfig(config); err != nil {
 			logrus.WithField("State", "NewTokenController").Errorf("LoadTokenConfig Failed:%s", err)
 			return nil
-		} else {
-			logrus.Infof("Load token Controller Successfully\n")
 		}
+		logrus.Infof("Load token Controller Successfully\n")
 	}
 	return t
 }
@@ -61,7 +61,7 @@ func (tc *tokenController) GenerateToken(claim *api.TokenClaim) (string, error) 
 		SigningAlg: sigAlg1,
 		KeyID:      tc.privateKey.KeyID(),
 	}
-	heade_json, err := json.Marshal(header)
+	headeJSON, err := json.Marshal(header)
 	if err != nil {
 		return "", nil
 	}
@@ -83,12 +83,12 @@ func (tc *tokenController) GenerateToken(claim *api.TokenClaim) (string, error) 
 		Name:    claim.Name,
 		Actions: claim.Actions,
 	})
-	claimJson, err := json.Marshal(claims)
+	claimJSON, err := json.Marshal(claims)
 	if err != nil {
 
 	}
 
-	payload := fmt.Sprintf("%s%s%s", encodeBase64(heade_json), token.TokenSeparator, encodeBase64(claimJson))
+	payload := fmt.Sprintf("%s%s%s", encodeBase64(headeJSON), token.TokenSeparator, encodeBase64(claimJSON))
 	sig, sigAlg2, err := tc.privateKey.Sign(strings.NewReader(payload), ALG)
 	if err != nil || sigAlg1 != sigAlg2 {
 		return "", nil

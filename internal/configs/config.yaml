@@ -1,0 +1,11 @@
+server:
+  domain: "registry.local"
+  address: "0.0.0.0"
+  port: "5050"
+token:
+  issuer: "distribution-token-server"
+  expiration: 36000
+secureModule: false
+tls:
+  cert: "/Users/angelbarrerasanchez-sighup/work/sighup/docker-auth/registry-auth-server/cli/server.crt"
+  key: "/Users/angelbarrerasanchez-sighup/work/sighup/docker-auth/registry-auth-server/cli/server.key"

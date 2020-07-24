@@ -2,6 +2,7 @@ package configs
 
 import (
 	"fmt"
+
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -54,7 +55,7 @@ func (c *Configs) initConfig(cfg string) error {
 
 func init() {
 	viper.AddConfigPath("./")
-	viper.AddConfigPath("./configs")
+	viper.AddConfigPath("./internal/configs")
 	viper.AddConfigPath("../")
-	viper.AddConfigPath("../configs")
+	viper.AddConfigPath("../internal/configs")
 }
